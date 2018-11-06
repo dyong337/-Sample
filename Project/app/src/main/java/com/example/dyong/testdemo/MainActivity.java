@@ -2,14 +2,22 @@ package com.example.dyong.testdemo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.example.dyong.testdemo.list_adapter.SimpleItemAdapter;
 import com.google.android.flexbox.FlexboxLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
             "蘑菇街", "名创优品", "b百佳华", "千百度", "小李飞刀",
             "今日打老虎", "玉面郎君"
     };
+    @BindView(R.id.container)
+    LinearLayout container;
 
 
     @Override
@@ -49,6 +59,40 @@ public class MainActivity extends AppCompatActivity {
             lp.leftMargin = 20;
             lp.topMargin = 20;
             flexboxLayout.addView(textView, lp);
+        }
+    }
+
+
+    @OnClick({R.id.btnShowBottomSheetDialog, R.id.showPopupWindow})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btnShowBottomSheetDialog:
+//                BottomSheetDialog mBottomSheetDialog = new BottomSheetDialog(this);
+//                View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_bottom_sheet_list, null);
+//                RecyclerView rv = contentView.findViewById(R.id.rv);
+//                rv.setLayoutManager(new LinearLayoutManager(this));
+//                rv.setAdapter(new SimpleItemAdapter(tabs));
+//                mBottomSheetDialog.setContentView(contentView);
+
+//                mBottomSheetDialog.show();
+                break;
+            case R.id.showPopupWindow:
+
+                View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_bottom_sheet_list, null);
+                RecyclerView rv = contentView.findViewById(R.id.rv);
+                rv.setLayoutManager(new LinearLayoutManager(this));
+                rv.setAdapter(new SimpleItemAdapter(tabs));
+                int height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                if (tabs.length > 6) {
+                    height = 600;
+                }
+                PopupWindow popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT,height);
+                popupWindow.setAnimationStyle(R.style.PopupWindowAnimation);
+                popupWindow.setFocusable(false);
+                popupWindow.setOutsideTouchable(true);
+                popupWindow.setContentView(contentView);
+                popupWindow.showAtLocation(container, Gravity.BOTTOM, 0, 0);
+                break;
         }
     }
 }
